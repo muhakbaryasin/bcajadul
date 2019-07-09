@@ -1,0 +1,35 @@
+1562648988106	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\go\\AppData\\Local\\Temp\\rust_mozprofile.omYbMgLUD30z"
+*** You are running in headless mode.
+1562648988489	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1562648988489	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1562648988490	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1562648990275	Marionette	INFO	Listening on port 64298
+1562648990322	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://ibank.klikbca.com/accountstmt.do?value(actions)=acctstmtview, line 54: TypeError: document.DateTime is undefined
+1562649004217	Marionette	INFO	Stopped listening on port 64298
+[Child 13728, Chrome_ChildThread] WARNING: pipe error: 109: file z:/task_1560988636/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 341
+[Child 13728,[Child 13376, Chrome_ChildThread] WARNING: pipe error: 109: file z:/task_1560988636/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 341
+[Child 131562649060734	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\go\\AppData\\Local\\Temp\\rust_mozprofile.rbUJrjznm7Yy"
+1562649061087	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1562649061087	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1562649061087	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1562649062254	Marionette	INFO	Listening on port 64344
+1562649062349	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://ibank.klikbca.com/accountstmt.do?value(actions)=acctstmtview, line 54: TypeError: document.DateTime is undefined
+1562649075696	Marionette	INFO	Stopped listening on port 64344
+[Child 15324, Chrome_ChildThread] WARNING: pipe error: 109: file z:/task_1560988636/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 341
+[Child 15324[Child 10124, Chrome_ChildThread] WARNING: pipe error: 109: file z:/task_1560988636/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 341
+[Child 1012[GPU 5008
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1562653543194	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\go\\AppData\\Local\\Temp\\rust_mozprofile.avsh9lTt98la"
+*** You are running in headless mode.
+1562653543534	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: mozillaAddons
+1562653543535	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: resource://pdf.js/
+1562653543535	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid extension permission: about:reader*
+1562653544653	Marionette	INFO	Listening on port 64700
+1562653544804	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://ibank.klikbca.com/accountstmt.do?value(actions)=acctstmtview, line 54: TypeError: document.DateTime is undefined
+1562653560055	Marionette	INFO	Stopped listening on port 64700
+[Child 7872, Chrome_ChildThread] WARNING: pipe error: 109: file z:/task_1560988636/build/src/ipc/chromium/src/chrome/common/ipc_channel_win.cc, line 341
+[Child 787
