@@ -2,7 +2,7 @@ import sys, os
 from pyramid.view import view_config
 from time import sleep
 from .Filelogger import FileLogger
-#from .MandiriKupu2Controller import MandiriKupu2Controller
+from .BcaJadulController import BcaJadulController
 from datetime import datetime, timedelta
 
 from selenium import webdriver
@@ -27,8 +27,8 @@ class MainView(object):
 	@view_config(route_name='mutasi', renderer='json')
 	def mutasi(self):
 		try:
-			#reqon = MandiriKupu2Controller(self.request)
-			#reqon.checkComplete(reqon.REQ_MUTASI)
+			reqon = BcaJadulController(self.request)
+			reqon.checkComplete(reqon.REQ_MUTASI)
 			
 			username = self.request.params['username']
 			password = self.request.params['password']
@@ -45,7 +45,7 @@ class MainView(object):
 			from_date = datetime.strptime( from_date,'%Y-%m-%d').strftime('%d/%m/%Y')
 			to_date = datetime.strptime( to_date,'%Y-%m-%d').strftime('%d/%m/%Y')
 			
-			return {'code' : 'OK', 'message' : '' , 'data' : {'mutasi' : self.__scraping_mutasi(username, password, rekening, from_date, to_date), 'rekening' : rekening}}
+			return {'code' : 'OK', 'message' : '' , 'data' : {'mutasi' : self.__scraping_mutasi(username, password, rekening, from_date, to_date), 'from_date' : self.request.params['from_date'], 'to_date' : self.request.params['to_date'],  'rekening' : rekening}}
 			
 		except Exception as e:
 			log.exception('view exception error - {}'.format(str(e)))
