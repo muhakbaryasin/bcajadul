@@ -6,8 +6,8 @@ from .BcaJadulController import BcaJadulController
 from datetime import datetime, timedelta
 
 from selenium import webdriver
-#from selenium.webdriver.firefox.options import Options as selopt
-from selenium.webdriver.chrome.options import Options as selopt
+from selenium.webdriver.firefox.options import Options as selopt
+#from selenium.webdriver.chrome.options import Options as selopt
 from selenium.webdriver.support.select import Select
 from pyquery import PyQuery as pq
 from copy import deepcopy
@@ -68,15 +68,18 @@ class MainView(object):
 			#btnClose
 			#btnSearch
 			#options = ChrmOpt()
+			print('rek - {} mulai scraping'.format(rekening))
 			options = selopt()
 			options.set_headless(headless=True)
 			
-			#self.wd = webdriver.Firefox(firefox_options=options, executable_path='geckodriver.exe')
-			self.wd = webdriver.Chrome(chrome_options=options, executable_path='chromedriver.exe')
+			self.wd = webdriver.Firefox(firefox_options=options, executable_path='geckodriver.exe')
+			#self.wd = webdriver.Chrome(chrome_options=options, executable_path='chromedriver.exe')
+			print('rek - {} buka browser'.format(rekening))
 			
 			attempt = 0
 			
 			self.wd.get('https://ibank.klikbca.com/')
+			print('rek - {} buka halaman awal'.format(rekening))
 			sleep(1)
 			self.wd.find_elements_by_id('user_id')[0].send_keys(user_name)
 			sleep(1)
@@ -127,12 +130,19 @@ class MainView(object):
 			select_fr = Select(self.wd.find_element_by_id('D1'))
 			opts_rekening = select_fr.options
 			
+			ada_rekening = False
+			
 			for i, each_option in enumerate(opts_rekening):
 				#print("option {} | cari {}".format(each_option.text, rekening))
 				if (each_option.text == rekening ):
+					ada_rekening = True
 					print('ada rekeningnya')
 					select_fr.select_by_index(i)
 					break
+			
+			if (not ada_rekening):
+				raise Exception('rekening: {} gak ada coy'.format(rekening))
+				
 			# chk_harian
 			self.wd.find_element_by_id('r1').click()
 			 
@@ -219,6 +229,11 @@ class MainView(object):
 				try:
 					tiap_mutasi = {}
 					split_entri = each_entri.find_elements_by_tag_name('td')
+					
+					if (len(split_entri) == 1 and split_entri[0].text.find('TIDAK') > -1 and split_entri[0].text.find('ADA') > -1 and split_entri[0].text.find('TRANSAKSI') > -1):
+						log.info('rek {} - dari tgl {} sampai tgl {} tidak ada transaksi'.format(rekening, from_date, to_date))
+						break
+					
 					tiap_mutasi['tanggal'] = split_entri[0].text
 					tiap_mutasi['keterangan'] = split_entri[1].text.replace("\n", "")
 					tiap_mutasi['cab'] = split_entri[2].text
@@ -230,15 +245,23 @@ class MainView(object):
 					pass
 			
 			self.scrapLogout__()
-			self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
+			
+			try:
+				self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
+			except Exception as e:
+				log.info('rek {} - gak bisa ss halaman logout. aneh'.format(rekening))
+				
 			self.wd.quit()
 					
 			return entry_mutasi
 		
 		except Exception as e:
-			self.scrapLogout__()
-			self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
-			self.wd.quit()
+			try:
+				self.scrapLogout__()
+				self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
+			except Exception as e:
+				log.info('gagal logout')
+				self.wd.quit()
 			
 			exc_type, exc_obj, exc_tb = sys.exc_info()
 			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -248,33 +271,44 @@ class MainView(object):
 			
 	
 	def scrapLogout__(self):
-		self.wd.switch_to_default_content()
+		try:
+			self.wd.switch_to_default_content()
+				
+			frames = self.wd.find_elements_by_tag_name('frame')
 			
-		frames = self.wd.find_elements_by_tag_name('frame')
+			for each_frame in frames:
+				if (each_frame.get_property('name') == 'menu'):
+					self.wd.switch_to.frame(each_frame)
+					break
+		except Exception as e:
+			log.info('gak ada frame menu kembali')
 		
-		for each_frame in frames:
-			if (each_frame.get_property('name') == 'menu'):
-				self.wd.switch_to.frame(each_frame)
-				break
+		try:
+			links_continued = self.wd.find_elements_by_tag_name('a')
+			
+			for each_link in links_continued:
+				if (each_link.text.find('embali') > -1 and each_link.text.find('enu') > -1 and each_link.text.find('tama') > -1):
+					each_link.click()
+					break
+		except Exception as e:
+			log.info('gak ada link kembali')
 		
-		links_continued = self.wd.find_elements_by_tag_name('a')
+		try:
+			frames = self.wd.find_elements_by_tag_name('frame')
+			
+			for each_frame in frames:
+				if (each_frame.get_property('name') == 'menu'):
+					self.wd.switch_to.frame(each_frame)
+					break
+		except Exception as e:
+			log.info('gak ada frame menu logout')
 		
-		for each_link in links_continued:
-			if (each_link.text.find('embali') > -1 and each_link.text.find('enu') > -1 and each_link.text.find('tama') > -1):
-				each_link.click()
-				break
-		
-		
-		frames = self.wd.find_elements_by_tag_name('frame')
-		
-		for each_frame in frames:
-			if (each_frame.get_property('name') == 'menu'):
-				self.wd.switch_to.frame(each_frame)
-				break
-		
-		links_continued = self.wd.find_elements_by_tag_name('a')
-		
-		for each_link in links_continued:
-			if (each_link.text.find('[') > -1 and each_link.text.find('LOGOUT') > -1 and each_link.text.find(']') > -1):
-				each_link.click()
-				break
+		try:
+			links_continued = self.wd.find_elements_by_tag_name('a')
+			
+			for each_link in links_continued:
+				if (each_link.text.find('[') > -1 and each_link.text.find('LOGOUT') > -1 and each_link.text.find(']') > -1):
+					each_link.click()
+					break
+		except Exception as e:
+			log.info('gak ada link logout')
