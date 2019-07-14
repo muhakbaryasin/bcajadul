@@ -15,6 +15,8 @@ from copy import deepcopy
 import logging
 log = logging.getLogger(__name__)
 
+import pdb
+
 class MainView(object):
 	def __init__(self, request):
 		self.request = request
@@ -91,6 +93,7 @@ class MainView(object):
 			for each_input in inputs:
 				if (each_input.get_property('value') == 'LOGIN'):
 					each_input.click()
+					print('rek - {} login'.format(rekening))
 					sleep(1)
 					break
 			
@@ -107,6 +110,7 @@ class MainView(object):
 			for each_link in links:
 				if (each_link.get_property('href').find('account_information_menu.htm') > -1):
 					each_link.click()
+					print('rek - {} buka halaman informasi akun'.format(rekening))
 					sleep(1)
 					break
 			
@@ -116,6 +120,7 @@ class MainView(object):
 			for each_link in links_continued:
 				if (each_link.text.find('utasi') > -1 and each_link.text.find('ekening') > -1):
 					each_link.click()
+					print('rek - {} buka halaman pencarian mutasi'.format(rekening))
 					sleep(1)
 					break
 			
@@ -127,8 +132,19 @@ class MainView(object):
 					self.wd.switch_to.frame(each_frame)
 					break
 			
-			select_fr = Select(self.wd.find_element_by_id('D1'))
-			opts_rekening = select_fr.options
+			attempt = 0
+			
+			while(attempt < 60):
+				try:
+					#pdb.set_trace()
+					select_fr = Select(self.wd.find_element_by_id('D1'))
+					opts_rekening = select_fr.options
+					break
+				except Exception as e:
+					print(str(e))
+					log.info('error scrape {} {}'.format(rekening, user_name))
+					attempt += 1
+					sleep(1)
 			
 			ada_rekening = False
 			
@@ -136,7 +152,7 @@ class MainView(object):
 				#print("option {} | cari {}".format(each_option.text, rekening))
 				if (each_option.text == rekening ):
 					ada_rekening = True
-					print('ada rekeningnya')
+					print('rek - {} ada'.format(rekening))
 					select_fr.select_by_index(i)
 					break
 			
@@ -244,10 +260,12 @@ class MainView(object):
 				except:
 					pass
 			
+			print('rek - {} logout'.format(rekening))
 			self.scrapLogout__()
 			
 			try:
-				self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
+				pass
+				#self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
 			except Exception as e:
 				log.info('rek {} - gak bisa ss halaman logout. aneh'.format(rekening))
 				
@@ -259,6 +277,7 @@ class MainView(object):
 			try:
 				self.scrapLogout__()
 				self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
+				self.wd.quit()
 			except Exception as e:
 				log.info('gagal logout')
 				self.wd.quit()

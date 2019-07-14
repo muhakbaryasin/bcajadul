@@ -6,4 +6,4 @@ class BcaJadulController(RequestController):
 		RequestController.__init__(self, request)
 		
 		# Add your request controller tuple under this code
-		self.REQ_MUTASI = ( ('username', self.ALPHANUMERIC), ('password', self.ALPHANUMERIC), ('rekening', self.TEXT), ('from_date', self.ISODATE), ('to_date', self.ISODATE) )
+		self.REQ_MUTASI = ( ('username', self.ALPHANUMERIC), ('password', self.NUMERIC), ('rekening', self.TEXT), ('from_date', self.ISODATE), ('to_date', self.ISODATE) )
