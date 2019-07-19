@@ -39,10 +39,10 @@ class MainView(object):
 			to_date = self.request.params['to_date']
 			
 			if ( datetime.now() - timedelta(30) > datetime.strptime( from_date,'%Y-%m-%d') ):
-				raise ('Tanggalnya awal minimal 30 hari yang lalu')
+				raise Exception('Tanggalnya awal minimal 30 hari yang lalu')
 			
 			if ( datetime.now() - timedelta(30) > datetime.strptime( to_date,'%Y-%m-%d') ):
-				raise ('Tanggalnya akhir minimal 30 hari yang lalu')
+				raise Exception('Tanggalnya akhir minimal 30 hari yang lalu')
 			
 			from_date = datetime.strptime( from_date,'%Y-%m-%d').strftime('%d/%m/%Y')
 			to_date = datetime.strptime( to_date,'%Y-%m-%d').strftime('%d/%m/%Y')
@@ -141,6 +141,7 @@ class MainView(object):
 					opts_rekening = select_fr.options
 					break
 				except Exception as e:
+					opts_rekening = []
 					print(str(e))
 					log.info('error scrape {} {}'.format(rekening, user_name))
 					attempt += 1
@@ -260,7 +261,6 @@ class MainView(object):
 				except:
 					pass
 			
-			print('rek - {} logout'.format(rekening))
 			self.scrapLogout__()
 			
 			try:
@@ -278,18 +278,16 @@ class MainView(object):
 				self.scrapLogout__()
 				self.wd.save_screenshot("ss/{}-6-keluar.png".format(rekening))
 				self.wd.quit()
-			except Exception as e:
+			except:
 				log.info('gagal logout')
 				self.wd.quit()
-			
-			exc_type, exc_obj, exc_tb = sys.exc_info()
-			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-			print(exc_type, fname, exc_tb.tb_lineno)
 			
 			raise e
 			
 	
-	def scrapLogout__(self):
+	def scrapLogout__(self, rekening):
+		print('rek - {} logout'.format(rekening))
+		
 		try:
 			self.wd.switch_to_default_content()
 				
